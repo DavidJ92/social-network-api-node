@@ -1,25 +1,24 @@
 const User = require('../models/User');
-const Thought = require('../models/Thought');
 
 const userController = {
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.find().populate('thoughts').populate('friends');
+      const users = await User.find();
       res.json(users);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: err.message });
     }
   },
 
   getUserById: async (req, res) => {
     try {
-      const user = await User.findById(req.params.userId).populate('thoughts').populate('friends');
+      const user = await User.findById(req.params.userId);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
       res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -28,7 +27,7 @@ const userController = {
       const newUser = await User.create(req.body);
       res.status(201).json(newUser);
     } catch (err) {
-      res.status(400).json(err);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -40,7 +39,7 @@ const userController = {
       }
       res.json(updatedUser);
     } catch (err) {
-      res.status(400).json(err);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -50,11 +49,9 @@ const userController = {
       if (!deletedUser) {
         return res.status(404).json({ message: 'User not found' });
       }
-      // Bonus: Remove user's associated thoughts
-      await Thought.deleteMany({ userId: req.params.userId });
       res.json({ message: 'User deleted successfully' });
     } catch (err) {
-      res.status(400).json(err);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -69,7 +66,7 @@ const userController = {
       await user.save();
       res.json(user);
     } catch (err) {
-      res.status(400).json(err);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -83,7 +80,7 @@ const userController = {
       await user.save();
       res.json(user);
     } catch (err) {
-      res.status(400).json(err);
+      res.status(400).json({ message: err.message });
     }
   }
 };
